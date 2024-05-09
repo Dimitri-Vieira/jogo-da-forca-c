@@ -1,6 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 
+void abertura(){
+    printf("*****************************\n");
+    printf("*       Jogo da Forca       *\n");
+    printf("*****************************\n\n");
+}
+
+void capturaChute(char chutes[26], int numTentativas){
+    char chute;
+    scanf(" %c", &chute);
+
+    // armazenando o chute (letra) feito, dentro do array "chutes" na posição que o número da tentativa corresponder, incrementando este número em todo final do loop
+    chutes[numTentativas] = chute;
+}
+
+
 int main(){
     char palavraSecreta[20];
 
@@ -12,6 +27,9 @@ int main(){
 
     char chutes[26]; // array que armazena os chutes de letras que o usuário já deu
     int numTentativas = 0; // número que servirá como índice de posição para o array "chutes" para que seja possível guardar o chute realizado em uma posição específica do array, preenchendo o array com os caracteres chutados
+
+    // imprime o cabeçalho do jogo
+    abertura();
 
     do{ 
         
@@ -36,11 +54,9 @@ int main(){
             }
         }
         printf("\n");
-        char chute;
-        scanf(" %c", &chute);
 
-        // armazenando o chute (letra) feito, dentro do array "chutes" na posição que o número da tentativa corresponder, incrementando este número em todo final do loop
-        chutes[numTentativas] = chute;
+        // registra um novo chute no array "chutes"
+        capturaChute(chutes, numTentativas);
         numTentativas++;
 
     }while(!acertou && !enforcou); // condição formulada com lógica booleana. A "!" indica negação, ou seja, inversão
