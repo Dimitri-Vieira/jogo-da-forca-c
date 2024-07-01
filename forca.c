@@ -5,7 +5,7 @@
 #include "forca.h" // biblioteca com as funções criadas para o jogo da forca.
 
 // VARIÁVEIS GLOBAIS
-char palavraSecreta[20]; // array que armazena a palavra secreta
+char palavraSecreta[TAMANHO_PALAVRA]; // array que armazena a palavra secreta
 char chutes[26]; // array que armazena os chutes de letras que o usuário já deu
 int chutesDados = 0; // número que servirá como índice de posição para o array "chutes" para que seja possível guardar o chute realizado em uma posição específica do array, preenchendo o array com os caracteres chutados
 
@@ -39,20 +39,33 @@ int jaChutou(char letra){
 }
 
 void desenhandoForca(){
-        // varrendo o array "palavraSecreta"
-        for(int i = 0; i < strlen(palavraSecreta); i++){
 
-            // verifica se o caractér inserido já foi chutado
-            int achou = jaChutou(palavraSecreta[i]);
+    int erros = chutesErrados();
+    // desenho da forca em ASCII ART utilizando operador ternário para desenhar o corpo do enforcado de acordo com a quantidade de erros já cometidos na forca
+    printf("  _______       \n");
+    printf(" |/      |      \n");
+    printf(" |      %c%c%c  \n", (erros>=1?'(':' '), 
+        (erros>=1?'_':' '), (erros>=1?')':' '));
+    printf(" |      %c%c%c  \n", (erros>=3?'\\':' '), 
+        (erros>=2?'|':' '), (erros>=3?'/': ' '));
+    printf(" |       %c     \n", (erros>=2?'|':' '));
+    printf(" |      %c %c   \n", (erros>=4?'/':' '), 
+        (erros>=4?'\\':' '));
+    printf(" |              \n");
+    printf("_|___           \n");
+    printf("\n\n");
 
-            if(achou){
-                printf("%c ", palavraSecreta[i]);
-
-            } else{
-                printf("_ ");
-            }
+    // varrendo o array "palavraSecreta"
+    for(int i = 0; i < strlen(palavraSecreta); i++){
+        // verifica se o caractér inserido já foi chutado
+        int achou = jaChutou(palavraSecreta[i]);
+        if(achou){
+            printf("%c ", palavraSecreta[i]);
+        } else{
+            printf("_ ");
         }
-        printf("\n");
+    }
+    printf("\n");
 }
 
 void adicionaPalavra(){
@@ -63,7 +76,7 @@ void adicionaPalavra(){
 
     // se quer for igual a S, ou seja, se quiser adicionar uma nova palavra
     if(quer == 'S'){
-        char novaPalavra[20];
+        char novaPalavra[TAMANHO_PALAVRA];
         printf("Qual a palavra?\n");
         scanf("%s", &novaPalavra);
 
@@ -127,8 +140,7 @@ int acertou(){
     return 1; //se todas as letras da palavra secreta já foram chutadas, retorne 1 (acertou)
 }
 
-// verifica se o usuário já foi enforcado com base na quantidade de erros chutados
-int enforcou(){
+int chutesErrados(){
     int erros = 0;
 
     // varre o array chutes
@@ -147,7 +159,13 @@ int enforcou(){
         if(!existe) erros++; // condição formulada com lógica boolena
     }
 
-    return erros >= 5; // quando houverem 5 letras erradas ou mais, o jogo acaba (retorna para o terminal)
+    return erros;
+}
+
+// verifica se o usuário já foi enforcado com base na quantidade de erros chutados
+int enforcou(){
+
+    return chutesErrados() >= 5; // quando houverem 5 letras erradas ou mais, o jogo acaba (retorna para o terminal)
 }
 
 int main(){
@@ -166,6 +184,42 @@ int main(){
         capturaChute();
 
     }while(!acertou() && !enforcou()); // condição formulada com lógica booleana. A "!" indica negação, ou seja, inversão. Em lógica booleana 0 é falso e 1 (ou valores maiores que 0) é verdadeiro.
+
+    if(acertou()){
+        printf("\nParabens, voce ganhou!\n\n");
+
+        printf("       ___________      \n");
+        printf("      '._==_==_=_.'     \n");
+        printf("      .-\\:      /-.    \n");
+        printf("     | (|:.     |) |    \n");
+        printf("      '-|:.     |-'     \n");
+        printf("        \\::.    /      \n");
+        printf("         '::. .'        \n");
+        printf("           ) (          \n");
+        printf("         _.' '._        \n");
+        printf("        '-------'       \n\n");
+
+    } else{
+        printf("\nPuxa, você foi enforcado!\n");
+        printf("A palavra era **%s**\n\n", palavraSecreta);
+
+        printf("    _______________         \n");
+        printf("   /               \\       \n"); 
+        printf("  /                 \\      \n");
+        printf("//                   \\/\\  \n");
+        printf("\\|   XXXX     XXXX   | /   \n");
+        printf(" |   XXXX     XXXX   |/     \n");
+        printf(" |   XXX       XXX   |      \n");
+        printf(" |                   |      \n");
+        printf(" \\__      XXX      __/     \n");
+        printf("   |\\     XXX     /|       \n");
+        printf("   | |           | |        \n");
+        printf("   | I I I I I I I |        \n");
+        printf("   |  I I I I I I  |        \n");
+        printf("   \\_             _/       \n");
+        printf("     \\_         _/         \n");
+        printf("       \\_______/           \n");
+    }
 
     adicionaPalavra();
 }
